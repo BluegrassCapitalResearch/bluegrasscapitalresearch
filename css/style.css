@@ -418,3 +418,24 @@ section{padding:96px 0}
 
 /* phones: hide the investor quotes in the mission section to save space */
 @media (max-width:640px){.quote-wall{display:none}}
+
+/* ---------- archive senior analysts: swipeable row on phones ---------- */
+.swipe-dots{display:none}
+@media (max-width:640px){
+  .sa-grid.sa-swipe{flex-wrap:nowrap;justify-content:flex-start;overflow-x:auto;scroll-snap-type:x mandatory;gap:20px;margin-left:-16px;margin-right:-16px;padding:6px 16px 10px;scrollbar-width:none}
+  .sa-grid.sa-swipe::-webkit-scrollbar{display:none}
+  .sa-grid.sa-swipe .member{flex:0 0 40%;scroll-snap-align:start}
+  .swipe-dots{display:flex;justify-content:center;gap:8px;margin-top:12px}
+  .swipe-dots button{width:8px;height:8px;border-radius:8px;border:0;padding:0;background:rgba(15,21,40,.2);cursor:pointer;transition:all .3s}
+  .swipe-dots button.on{width:28px;background:var(--accent)}
+}
+
+/* ---------- placement logo wheels: smaller on phones ---------- */
+@media (max-width:640px){
+  .wheel-track{gap:14px}
+  .wheel+.wheel{margin-top:14px}
+  .logo-card{width:168px;height:88px;padding:14px 18px}
+  .logo-card img{max-height:46px}
+}
+/* archive leaders (Chairman, Advisor): side by side on phones */
+@media (max-width:640px){ .sa-grid.sa-lead{flex-wrap:nowrap;justify-content:center;gap:20px} .sa-grid.sa-lead .member{flex:0 0 40%} }
