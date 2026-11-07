@@ -8,7 +8,8 @@ const sectorName = k => (SECTORS.find(s => s.key === k) || {}).name || k;
 const fmtPT = v => v == null ? "" : "PT $" + (v < 10 ? v.toFixed(2) : Number.isInteger(v) ? v : v.toFixed(2));
 const fmtDate = d => new Date(d + "T12:00:00").toLocaleDateString("en-US", {month:"short", day:"numeric", year:"numeric"});
 // report PDFs live in a folder per semester, e.g. reports/fall-2025/ba-grant-clay.pdf
-const pdf = r => "reports/" + r.semester.toLowerCase().replace(/\s+/g, "-") + "/" + r.file + ".pdf";
+// (a report can set folder:"..." to live somewhere else)
+const pdf = r => "reports/" + (r.folder || r.semester.toLowerCase().replace(/\s+/g, "-")) + "/" + r.file + ".pdf";
 const cover = r => "assets/covers/" + r.file + ".jpg";
 const byDate = (a,b) => b.date.localeCompare(a.date);
 

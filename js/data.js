@@ -51,7 +51,7 @@ const SECTORS = [
 
 /* ---------------------------------------------------------------------
    REPORTS
-   To add a report: put the PDF in /reports, its cover image in
+   To add a report: put the PDF in /reports/<semester>/ (e.g. /reports/fall-2026/), its cover image in
    /assets/covers (optional, see README), and copy one line below.
      sector:   consumer | tmt | financials | healthcare | industrials | energy
      rating:   BUY | HOLD | SELL
@@ -138,8 +138,8 @@ const REPORTS = [
 
   // ----- 2025 -----
   { ticker:"LULU", company:"Lululemon Athletica",      title:"Stretching Without Breaking a Thread",    analyst:"Oliver Liang",       sector:"consumer",    industry:"Apparel Retail",             date:"2025-08-14", semester:"Fall 2025",   rating:"BUY",  pt:300,    file:"oliver-liang-nasdaq-lulu" },
-  { ticker:"SBUX", company:"Starbucks Corporation",    title:"The Brew Has Gone Cold",                  analyst:"Oliver Liang",       sector:"consumer",    industry:"Restaurants",                date:"2025-05-28", semester:"Spring 2025", rating:"SELL", pt:70,     file:"oliver-liang-nasdaq-sbux" },
-  { ticker:"FIX",  company:"Comfort Systems USA",      title:"$FIXing the Future with a Comfortable Compounder", analyst:"Oliver Liang", sector:"industrials", industry:"Building Services",     date:"2025-04-28", semester:"Spring 2025", rating:"BUY",  pt:500,    file:"bcr-fix-sample-report" },
+  { ticker:"SBUX", company:"Starbucks Corporation",    title:"The Brew Has Gone Cold",                  analyst:"Oliver Liang",       sector:"consumer",    industry:"Restaurants",                date:"2025-05-28", semester:"Spring 2025", rating:"SELL", pt:70,     file:"oliver-liang-nasdaq-sbux", folder:"fall-2025" },
+  { ticker:"FIX",  company:"Comfort Systems USA",      title:"$FIXing the Future with a Comfortable Compounder", analyst:"Oliver Liang", sector:"industrials", industry:"Building Services",     date:"2025-04-28", semester:"Spring 2025", rating:"BUY",  pt:500,    file:"bcr-fix-sample-report", folder:"fall-2025" },
 ];
 
 /* ---------------------------------------------------------------------
