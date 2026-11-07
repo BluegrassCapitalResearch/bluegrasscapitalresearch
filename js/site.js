@@ -134,6 +134,22 @@ function rosterWheel(list){
   const dur = cols.length * (150 + 28) / 30;   // constant speed: 30 pixels per second
   return `<div class="roster-wheel" aria-hidden="true"><div class="rw-track" style="animation-duration:${dur}s">${cols.join("")}${cols.join("")}</div></div>`;
 }
+/* ---------- phones: dots under a swipeable row (pitch cards, archive senior analysts) ---------- */
+function swipeDots(track, cls = "swipe-dots"){
+  const items = [...track.children]; if (items.length < 2) return;
+  track.insertAdjacentHTML("afterend", `<div class="${cls}">${items.map((_, i) => `<button aria-label="Item ${i + 1}"></button>`).join("")}</div>`);
+  const dots = [...track.nextElementSibling.children];
+  const step = () => items[1].offsetLeft - items[0].offsetLeft || 1;
+  const update = () => {
+    const max = track.scrollWidth - track.clientWidth;
+    let i = Math.round(track.scrollLeft / step());
+    if (max > 0 && track.scrollLeft >= max - 2) i = items.length - 1;   // reached the end
+    dots.forEach((d, j) => d.classList.toggle("on", j === Math.min(i, items.length - 1)));
+  };
+  track.addEventListener("scroll", update, {passive: true});
+  dots.forEach((d, i) => d.addEventListener("click", () => track.scrollTo({left: items[i].offsetLeft - items[0].offsetLeft, behavior: "smooth"})));
+  update();
+}
 /* ---------- homepage ---------- */
 if (page === "overview"){
   // carousel
@@ -154,17 +170,7 @@ if (page === "overview"){
       </div>
     </article>`).join("");
   // phones: the cards become a swipeable row with dots (see .podium in style.css)
-  const podium = $("#podium"), cardsEl = [...podium.children];
-  podium.insertAdjacentHTML("afterend", `<div class="podium-dots">${cardsEl.map((_, i) => `<button aria-label="Place ${i + 1}"></button>`).join("")}</div>`);
-  const pdots = [...document.querySelectorAll(".podium-dots button")];
-  const onPodiumScroll = () => {
-    const step = cardsEl[1] ? cardsEl[1].offsetLeft - cardsEl[0].offsetLeft : 1;
-    const i = Math.round(podium.scrollLeft / step);
-    pdots.forEach((d, j) => d.classList.toggle("on", j === i));
-  };
-  podium.addEventListener("scroll", onPodiumScroll, {passive: true});
-  pdots.forEach((d, i) => d.addEventListener("click", () => podium.scrollTo({left: cardsEl[i].offsetLeft - cardsEl[0].offsetLeft, behavior: "smooth"})));
-  onPodiumScroll();
+  swipeDots($("#podium"), "podium-dots");
 
 
 
@@ -258,7 +264,7 @@ if (page === "archive"){
     const leads = s.seniorAnalysts.filter(m => m.role), rest = s.seniorAnalysts.filter(m => !m.role);
     // titled leadership on top, every other senior analyst side by side in one row
     const senior = (leads.length ? `<div class="team-grid sa-grid sa-lead">${leads.map(sa).join("")}</div>` : "")
-      + `<div class="team-grid sa-grid">${rest.map(sa).join("")}</div>`;
+      + `<div class="team-grid sa-grid sa-swipe">${rest.map(sa).join("")}</div>`;
     const groups = s.classGroups.map(g => `${g.label ? `<h4 class="grp">${esc(g.label)}</h4>` : ""}<ul class="roster has-wheel">${names(g.names)}</ul>${rosterWheel([...g.names].sort(byFirst))}`).join("");
     return `<section class="sem-block">
       <div class="carousel-sec dark sem-feature"><div class="wrap">
@@ -272,6 +278,8 @@ if (page === "archive"){
         <h3 class="sem-sub">Analyst Class</h3>${groups}
       </div></section>`;
   }).join("");
+  // phones: senior analysts swipe sideways with dots
+  document.querySelectorAll(".sa-swipe").forEach(t => swipeDots(t));
   // one 3D carousel per semester
   document.querySelectorAll(".sem-feature").forEach((band, i) => {
     const s = ARCHIVE[i];
