@@ -153,6 +153,18 @@ if (page === "overview"){
         ${p.deck ? `<a class="deck" href="${p.deck}" target="_blank" rel="noopener"><img src="${p.cover}" alt="">View Pitch &rarr;</a>` : ""}
       </div>
     </article>`).join("");
+  // phones: the cards become a swipeable row with dots (see .podium in style.css)
+  const podium = $("#podium"), cardsEl = [...podium.children];
+  podium.insertAdjacentHTML("afterend", `<div class="podium-dots">${cardsEl.map((_, i) => `<button aria-label="Place ${i + 1}"></button>`).join("")}</div>`);
+  const pdots = [...document.querySelectorAll(".podium-dots button")];
+  const onPodiumScroll = () => {
+    const step = cardsEl[1] ? cardsEl[1].offsetLeft - cardsEl[0].offsetLeft : 1;
+    const i = Math.round(podium.scrollLeft / step);
+    pdots.forEach((d, j) => d.classList.toggle("on", j === i));
+  };
+  podium.addEventListener("scroll", onPodiumScroll, {passive: true});
+  pdots.forEach((d, i) => d.addEventListener("click", () => podium.scrollTo({left: cardsEl[i].offsetLeft - cardsEl[0].offsetLeft, behavior: "smooth"})));
+  onPodiumScroll();
 
 
 
