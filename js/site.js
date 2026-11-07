@@ -7,7 +7,8 @@ const sectorKey = document.body.dataset.sector;
 const sectorName = k => (SECTORS.find(s => s.key === k) || {}).name || k;
 const fmtPT = v => v == null ? "" : "PT $" + (v < 10 ? v.toFixed(2) : Number.isInteger(v) ? v : v.toFixed(2));
 const fmtDate = d => new Date(d + "T12:00:00").toLocaleDateString("en-US", {month:"short", day:"numeric", year:"numeric"});
-const pdf = r => "reports/" + r.file + ".pdf";
+// report PDFs live in a folder per semester, e.g. reports/fall-2025/ba-grant-clay.pdf
+const pdf = r => "reports/" + r.semester.toLowerCase().replace(/\s+/g, "-") + "/" + r.file + ".pdf";
 const cover = r => "assets/covers/" + r.file + ".jpg";
 const byDate = (a,b) => b.date.localeCompare(a.date);
 
@@ -125,6 +126,13 @@ function placementsWheel(){
   });
 }
 placementsWheel();
+/* ---------- analyst class on phones: a scrolling wheel of columns, 4 names each ---------- */
+function rosterWheel(list){
+  const cols = [];
+  for (let i = 0; i < list.length; i += 4) cols.push(`<div class="rw-col">${list.slice(i, i + 4).map(n => `<span>${esc(n)}</span>`).join("")}</div>`);
+  const dur = cols.length * (150 + 28) / 30;   // constant speed: 30 pixels per second
+  return `<div class="roster-wheel" aria-hidden="true"><div class="rw-track" style="animation-duration:${dur}s">${cols.join("")}${cols.join("")}</div></div>`;
+}
 /* ---------- homepage ---------- */
 if (page === "overview"){
   // carousel
@@ -159,8 +167,10 @@ if (page === "overview"){
   $("#team-sa").innerHTML = LEADERSHIP.filter(m => m.role === "Senior Analyst").map(card).join("");
   $("#class-title").textContent = SITE.currentClassTitle;
   // roster is alphabetical by first name
-  $("#class").innerHTML = [...CURRENT_CLASS].sort((a, b) => a.localeCompare(b))
-    .map(n => `<li>${esc(n)}</li>`).join("");
+  const cls = [...CURRENT_CLASS].sort((a, b) => a.localeCompare(b));
+  $("#class").innerHTML = cls.map(n => `<li>${esc(n)}</li>`).join("");
+  $("#class").classList.add("has-wheel");
+  $("#class").insertAdjacentHTML("afterend", rosterWheel(cls));
 
 }
 
@@ -236,7 +246,7 @@ if (page === "archive"){
     // titled leadership on top, every other senior analyst side by side in one row
     const senior = (leads.length ? `<div class="team-grid sa-grid sa-lead">${leads.map(sa).join("")}</div>` : "")
       + `<div class="team-grid sa-grid">${rest.map(sa).join("")}</div>`;
-    const groups = s.classGroups.map(g => `${g.label ? `<h4 class="grp">${esc(g.label)}</h4>` : ""}<ul class="roster">${names(g.names)}</ul>`).join("");
+    const groups = s.classGroups.map(g => `${g.label ? `<h4 class="grp">${esc(g.label)}</h4>` : ""}<ul class="roster has-wheel">${names(g.names)}</ul>${rosterWheel([...g.names].sort(byFirst))}`).join("");
     return `<section class="sem-block">
       <div class="carousel-sec dark sem-feature"><div class="wrap">
         <h2 class="sec">${esc(s.semester)}</h2>${s.note ? `<p class="sem-note">${esc(s.note)}</p>` : ""}
