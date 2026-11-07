@@ -415,3 +415,6 @@ section{padding:96px 0}
   .podium-dots button{width:8px;height:8px;border-radius:8px;border:0;padding:0;background:rgba(15,21,40,.2);cursor:pointer;transition:all .3s}
   .podium-dots button.on{width:28px;background:var(--accent)}
 }
+
+/* phones: hide the investor quotes in the mission section to save space */
+@media (max-width:640px){.quote-wall{display:none}}
