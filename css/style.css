@@ -404,3 +404,14 @@ section{padding:96px 0}
   .sem-block .rw-col span{color:var(--ink)}
 }
 @media (max-width:640px) and (prefers-reduced-motion:reduce){.rw-track{animation:none}.roster-wheel{overflow-x:auto}}
+
+/* ---------- stock pitch results: swipeable cards on phones ---------- */
+.podium-dots{display:none}
+@media (max-width:640px){
+  .podium{display:flex;grid-template-columns:none;overflow-x:auto;scroll-snap-type:x mandatory;gap:16px;margin:40px -16px 0;padding:0 16px 10px;scrollbar-width:none}
+  .podium::-webkit-scrollbar{display:none}
+  .podium .place{flex:0 0 84%;scroll-snap-align:center}
+  .podium-dots{display:flex;justify-content:center;gap:8px;margin-top:14px}
+  .podium-dots button{width:8px;height:8px;border-radius:8px;border:0;padding:0;background:rgba(15,21,40,.2);cursor:pointer;transition:all .3s}
+  .podium-dots button.on{width:28px;background:var(--accent)}
+}
